@@ -99,5 +99,17 @@ app.get("/", (req, res) => {
 });
 
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// const PORT = process.env.PORT;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// // Load SSL certificate and key
+const sslOptions = {
+  key: fs.readFileSync('/etc/letsencrypt/live/chapaguta.online/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/chapaguta.online/fullchain.pem'),
+};
+
+// Create HTTPS server
+const PORT = process.env.PORT || 5000; // Default to port 5000 if not specified
+https.createServer(sslOptions, app).listen(PORT, () => {
+  console.log(`Server running on https://localhost:${PORT}`);
+});
